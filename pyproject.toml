@@ -1,0 +1,10 @@
+[project]
+name = "cv-rewriter"
+version = "0.1.0"
+description = "Human-in-the-loop LangGraph agent that learns a CV formatting prompt from a reference CV and applies it to another."
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "anthropic>=0.50",
+    "langgraph>=0.2",
+]

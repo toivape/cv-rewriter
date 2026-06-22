@@ -60,9 +60,12 @@ def main():
         state = graph.get_state(config)
 
         if not state.next:
+            iteration = state.values.get("iteration", 1)
+            final_cv_md = Path(output_dir) / f"iteration_{iteration:03d}" / "cv.md"
             print("\nDone.")
             print(f"  Final prompt : {Path(output_dir) / 'final_prompt.md'}")
-            print(f"  Final CV PDF : {Path(output_dir) / 'final_cv.pdf'}")
+            print(f"  Final CV (md): {final_cv_md}")
+            print(f"  Export to PDF: uv run python pdf_utils.py {final_cv_md}")
             break
 
         feedback = input(

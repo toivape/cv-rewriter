@@ -1,13 +1,11 @@
 import json
 import re
-import subprocess
 from pathlib import Path
 from typing import Any
 
 import anthropic
 from langgraph.types import interrupt
 
-from pdf_utils import export_to_pdf
 from state import CVState
 
 client = anthropic.Anthropic()
@@ -506,19 +504,3 @@ def generalize_prompt(state: CVState) -> dict:
     print(f"Final prompt → {output_dir / 'final_prompt.md'}")
 
     return {"current_prompt": final_prompt, "is_finalized": True}
-
-
-def export_pdf(state: CVState) -> dict:
-    output_dir = Path(state["output_dir"])
-    iteration = state.get("iteration", 1)
-    cv_md = output_dir / f"iteration_{iteration:03d}" / "cv.md"
-    pdf_path = output_dir / "final_cv.pdf"
-
-    print(f"Exporting final CV to PDF: {pdf_path}")
-    try:
-        export_to_pdf(cv_md, pdf_path)
-        print(f"PDF exported → {pdf_path}")
-    except (subprocess.CalledProcessError, FileNotFoundError) as e:
-        print(f"Warning: pandoc export failed ({e}). The Markdown CV is at {cv_md}")
-
-    return {}

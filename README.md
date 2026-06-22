@@ -6,7 +6,8 @@ extracts them to Markdown, generates a reusable formatting prompt, applies it, a
 feedback from both an automated AI reviewer and a human reviewer.
 
 The primary output is **`final_prompt.md`** — a portable, reusable prompt you can apply to any CV
-later. The reformatted CV is also exported as PDF.
+later. The reformatted CV is saved as Markdown; you can optionally export it to PDF with a separate
+command (see [Export to PDF](#export-to-pdf)).
 
 ## How it works
 
@@ -21,15 +22,18 @@ later. The reformatted CV is also exported as PDF.
    **prompt** (not the CV ad-hoc) and re-applies it. Both AI findings and your feedback feed into
    the refinement.
 6. Repeat until satisfied, then press Enter or type `done`.
-7. The prompt is generalised and saved to `output/final_prompt.md`.
-8. The final CV is exported to `output/final_cv.pdf` via pandoc.
+7. The prompt is generalised and saved to `output/final_prompt.md`; the final reformatted CV is the
+   Markdown in the last `iteration_NNN/cv.md`.
+8. Optionally, export that CV to PDF with a separate command (see [Export to PDF](#export-to-pdf)).
 
 ## Prerequisites
 
 - Python 3.14+
 - [uv](https://docs.astral.sh/uv/) package manager
-- [pandoc](https://pandoc.org/installing.html) for PDF export (`brew install pandoc` on macOS)
 - `ANTHROPIC_API_KEY` environment variable set
+- Optional (only for [Export to PDF](#export-to-pdf)): [pandoc](https://pandoc.org/installing.html)
+  and [WeasyPrint](https://weasyprint.org/) (`brew install pandoc weasyprint` on macOS) — WeasyPrint
+  is the PDF engine, so no LaTeX is needed
 
 ## Setup
 
@@ -50,6 +54,19 @@ uv run python main.py --preferred ref.pdf --cv mine.pdf --guidelines guidelines.
 uv run python main.py --preferred ref.pdf --cv mine.pdf --output ./my-output
 ```
 
+## Export to PDF
+
+The main run stops at Markdown and needs no extra tools. To turn the final CV into a PDF, install
+the optional dependencies above and run:
+
+```bash
+# Defaults the output next to the input, e.g. iteration_002/cv.pdf
+uv run python pdf_utils.py output-<timestamp>/iteration_002/cv.md
+
+# Or choose the output path
+uv run python pdf_utils.py output-<timestamp>/iteration_002/cv.md final_cv.pdf
+```
+
 ## Output layout
 
 ```
@@ -61,7 +78,8 @@ output/
 │   ├── cv.md             # CV output (for review)
 │   └── ai_review.json    # AI reviewer findings
 ├── iteration_002/
-│   └── ...
-├── final_prompt.md       # reusable formatting prompt — primary output
-└── final_cv.pdf          # final CV reformatted by the prompt
+│   └── ...               # the last iteration's cv.md is the final reformatted CV
+└── final_prompt.md       # reusable formatting prompt — primary output
 ```
+
+PDF export is opt-in (see [Export to PDF](#export-to-pdf)) and writes wherever you point it.

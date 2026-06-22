@@ -5,7 +5,6 @@ from nodes import (
     ai_review,
     apply_prompt,
     ask_ai_question,
-    export_pdf,
     extract_content,
     generalize_prompt,
     generate_prompt,
@@ -55,7 +54,6 @@ def build_graph():
     builder.add_node("human_review", human_review)
     builder.add_node("refine_prompt", refine_prompt)
     builder.add_node("generalize_prompt", generalize_prompt)
-    builder.add_node("export_pdf", export_pdf)
 
     builder.add_edge(START, "upload_pdfs")
     builder.add_conditional_edges("upload_pdfs", _should_extract)
@@ -67,7 +65,6 @@ def build_graph():
     builder.add_conditional_edges("ask_ai_question", _route_after_ai_question)
     builder.add_conditional_edges("human_review", _route_after_review)
     builder.add_edge("refine_prompt", "apply_prompt")
-    builder.add_edge("generalize_prompt", "export_pdf")
-    builder.add_edge("export_pdf", END)
+    builder.add_edge("generalize_prompt", END)
 
     return builder.compile(checkpointer=MemorySaver())

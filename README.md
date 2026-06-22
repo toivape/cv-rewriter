@@ -22,8 +22,8 @@ command (see [Export to PDF](#export-to-pdf)).
    **prompt** (not the CV ad-hoc) and re-applies it. Both AI findings and your feedback feed into
    the refinement.
 6. Repeat until satisfied, then press Enter or type `done`.
-7. The prompt is generalised and saved to `output/final_prompt.md`; the final reformatted CV is the
-   Markdown in the last `iteration_NNN/cv.md`.
+7. The prompt is generalised and saved to `<output_dir>/final_prompt.md`; the final reformatted CV
+   is the Markdown in the last `iteration_NNN/cv.md`.
 8. Optionally, export that CV to PDF with a separate command (see [Export to PDF](#export-to-pdf)).
 
 ## Prerequisites
@@ -70,7 +70,7 @@ uv run python pdf_utils.py output-<timestamp>/iteration_002/cv.md final_cv.pdf
 ## Output layout
 
 ```
-output/
+<output_dir>/             # default: output-<timestamp>, or whatever you pass to --output
 ├── preferred_cv.md       # cached extraction of the reference PDF
 ├── original_cv.md        # cached extraction of your CV
 ├── iteration_001/
